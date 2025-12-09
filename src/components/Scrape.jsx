@@ -28,25 +28,32 @@ const Scrape = () => {
   return (
     <>
       <h1>Podaj dane logowania:</h1>
-      <input
-        type="text"
-        value={userLogin}
-        onChange={(e) => setUserLogin(e.target.value)}
-        placeholder="login"
-      />
-      <input
-        type="text"
-        value={userPassword}
-        onChange={(e) => setUserPassword(e.target.value)}
-        placeholder="haslo"
-      />
-      <input
-        type="text"
-        value={orderNumber}
-        onChange={(e) => setOrderNumber(e.target.value)}
-        placeholder="numer zamowienia"
-      />
-      <button onClick={handleScrape}>generuj</button>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleScrape();
+        }}
+      >
+        <input
+          type="text"
+          value={userLogin}
+          onChange={(e) => setUserLogin(e.target.value)}
+          placeholder="login"
+        />
+        <input
+          type="text"
+          value={userPassword}
+          onChange={(e) => setUserPassword(e.target.value)}
+          placeholder="haslo"
+        />
+        <input
+          type="text"
+          value={orderNumber}
+          onChange={(e) => setOrderNumber(e.target.value)}
+          placeholder="numer zamowienia"
+        />
+        <button type="submit">generuj</button>
+      </form>
       <DisplayWZ data={data} />
     </>
   );

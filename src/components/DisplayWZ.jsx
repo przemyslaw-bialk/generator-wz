@@ -1,35 +1,45 @@
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import "../fonts/Roboto-Regular-normal";
+import React from "react";
 
 const DisplayWZ = ({ data }) => {
+  console.log(data);
+
+  const { result, address } = data;
+
   const handleGenerate = () => {
     const doc = new jsPDF();
     doc.setFont("Roboto-Regular", "normal");
     doc.setFontSize(12);
 
-    // Nagłówek
-    doc.text("Zamówienie: #Z251208606 z dnia: 08/12/25", 20, 20);
-    doc.text("Calibra Mateusz Dzieliński", 20, 27);
-    doc.text("Chylońska 130", 20, 34);
-    doc.text("81-021 Gdynia", 20, 41);
-    doc.text("VAT: 9581595323", 20, 48);
+    // buyer data
+    doc.text("Kupujący", 14, 15, { align: "left" });
+    doc.text(`${address}`, 14, 21, { align: "left" });
+
+    // seller data
+    doc.text("Sprzedający", 138, 15, { align: "left" });
+    doc.text("Ecoterm", 138, 21, { align: "left" });
+    doc.text("os. Kaszubskie 1/21", 138, 25, { align: "left" });
+    doc.text("84-200 Wejherowo", 138, 30, { align: "left" });
+    doc.text("Numer BDO: 000024265", 138, 35, { align: "left" });
+    doc.text("VAT: 588-182-20-63", 138, 40, { align: "left" });
 
     // Tabela
     const tableColumn = ["#", "Nazwa", "szt."];
-    const tableRows = data.map((el, index) => [
+    const tableRows = result.map((el, index) => [
       index + 1,
       el.item_name,
       el.item_qtn,
     ]);
 
     autoTable(doc, {
-      startY: 60,
+      startY: 45,
       head: [tableColumn],
       body: tableRows,
       theme: "grid",
       headStyles: { fillColor: [200, 200, 200] },
-      styles: { font: "Roboto-Regular", fontSize: 10, cellPadding: 3 },
+      styles: { font: "Roboto-Regular", fontSize: 7, cellPadding: 2 },
       columnStyles: {
         0: { cellWidth: 10 },
         1: { cellWidth: 130 },
@@ -43,14 +53,17 @@ const DisplayWZ = ({ data }) => {
   return (
     <>
       <h3>gotowa WZ</h3>
-      {data.map((item, index) => (
+      <p style={{ whiteSpace: "pre-line" }}>{address}</p>
+      {result?.map((item, index) => (
         <p key={index}>
           {index + 1} {item.item_name} - {item.item_qtn}
         </p>
       ))}
-      <button onClick={handleGenerate}>pobierz pdf</button>
+      {result?.length > 0 && (
+        <button onClick={handleGenerate}>pobierz pdf</button>
+      )}
     </>
   );
 };
 
-export default DisplayWZ;
+export default React.memo(DisplayWZ);

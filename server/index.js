@@ -34,6 +34,13 @@ app.post("/scrape", async (req, res) => {
 
     const result = [];
 
+    // getting address
+    const address_id = await page.$("div.address > p");
+    const address_html = await address_id.evaluate((el) => el.innerHTML);
+    // changing </br> to n\ to correct display
+    const address = address_html.replace(/<br ?\/?>/g, "\n").trim();
+
+    // getting items and quantity of items
     const rows = await page.$$("tr.item");
 
     for (const row of rows) {
@@ -52,7 +59,7 @@ app.post("/scrape", async (req, res) => {
       });
     }
 
-    res.json(result);
+    res.json({ result: result, address: address });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
