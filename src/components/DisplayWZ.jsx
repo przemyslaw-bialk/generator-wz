@@ -6,7 +6,11 @@ import React from "react";
 const DisplayWZ = ({ data }) => {
   console.log(data);
 
-  const { result, address } = data;
+  const { result, address, order_date } = data;
+
+  // order number
+  const order_number = "#Z251209608";
+  const wz_number = order_number.replace("#", "WZ");
 
   const handleGenerate = () => {
     const doc = new jsPDF();
@@ -25,7 +29,16 @@ const DisplayWZ = ({ data }) => {
     doc.text("Numer BDO: 000024265", 138, 35, { align: "left" });
     doc.text("VAT: 588-182-20-63", 138, 40, { align: "left" });
 
-    // Tabela
+    // header
+    doc.setFontSize(14);
+    doc.text(`Wydanie zewnętrzne numer: ${wz_number}`, 55, 50);
+    doc.text(
+      `na podstawie zamówienia: ${order_number} z ${order_date}`,
+      44,
+      56
+    );
+
+    // table
     const tableColumn = ["#", "Nazwa", "szt."];
     const tableRows = result.map((el, index) => [
       index + 1,
@@ -34,7 +47,7 @@ const DisplayWZ = ({ data }) => {
     ]);
 
     autoTable(doc, {
-      startY: 45,
+      startY: 63,
       head: [tableColumn],
       body: tableRows,
       theme: "grid",

@@ -40,6 +40,12 @@ app.post("/scrape", async (req, res) => {
     // changing </br> to n\ to correct display
     const address = address_html.replace(/<br ?\/?>/g, "\n").trim();
 
+    // getting order data
+    const order_date_id = await page.$("input.date-picker");
+    const order_date = await order_date_id.evaluate((el) =>
+      el.getAttribute("value")
+    );
+
     // getting items and quantity of items
     const rows = await page.$$("tr.item");
 
@@ -59,7 +65,7 @@ app.post("/scrape", async (req, res) => {
       });
     }
 
-    res.json({ result: result, address: address });
+    res.json({ result: result, address: address, order_date: order_date });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
