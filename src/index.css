@@ -4,8 +4,14 @@ body {
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
 
-  background-color: rgb(17, 11, 51);
-  color: aqua;
+  background-color: #0c0c14;
+  color: #d8d8e8;
+}
+
+button {
+  background-color: #c119cd;
+  color: #e9dfe9;
+  border: 1px solid #6b4455;
 }
 
 code {

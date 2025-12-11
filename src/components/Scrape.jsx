@@ -6,8 +6,11 @@ const Scrape = () => {
   const [userPassword, setUserPassword] = useState("");
   const [orderNumber, setOrderNumber] = useState("");
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const handleScrape = async () => {
+    setLoading(true);
+    setData([]);
     try {
       const response = await fetch("http://localhost:5000/scrape", {
         method: "POST",
@@ -22,6 +25,8 @@ const Scrape = () => {
       setData(data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -41,7 +46,7 @@ const Scrape = () => {
           placeholder="login"
         />
         <input
-          type="text"
+          type="password"
           value={userPassword}
           onChange={(e) => setUserPassword(e.target.value)}
           placeholder="haslo"
@@ -54,7 +59,7 @@ const Scrape = () => {
         />
         <button type="submit">generuj</button>
       </form>
-      <DisplayWZ data={data} />
+      {loading ? <p>generating...</p> : <DisplayWZ data={data} />}
     </>
   );
 };

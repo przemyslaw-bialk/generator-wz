@@ -65,16 +65,15 @@ const DisplayWZ = ({ data }) => {
 
   return (
     <>
-      <h3>gotowa WZ</h3>
+      {result?.length > 0 && (
+        <button onClick={handleGenerate}>pobierz pdf</button>
+      )}
       <p style={{ whiteSpace: "pre-line" }}>{address}</p>
       {result?.map((item, index) => (
         <p key={index}>
           {index + 1} {item.item_name} - {item.item_qtn}
         </p>
       ))}
-      {result?.length > 0 && (
-        <button onClick={handleGenerate}>pobierz pdf</button>
-      )}
     </>
   );
 };

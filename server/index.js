@@ -9,6 +9,8 @@ app.use(express.json());
 app.post("/scrape", async (req, res) => {
   const { user_login, user_password, order_number } = req.body;
 
+  const order_number_provided = order_number;
+
   try {
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
@@ -22,15 +24,24 @@ app.post("/scrape", async (req, res) => {
     const popup = await page.$("div.admin-email__actions-secondary > a");
 
     if (popup) {
-      await popup.click();
       await page.waitForNavigation({ waitUntil: "networkidle2" });
+      await popup.click();
     } else {
       console.log("nie bylo popupa, ide dalej");
     }
+
     await page.waitForNavigation({ waitUntil: "networkidle2" });
-    await page.goto(
-      `https://ego2.pl/wp-admin/admin.php?page=wc-orders&action=edit&id=${order_number}`
-    );
+
+    // if order number is not provided then click the last order
+    if (!order_number_provided) {
+      await page.goto("https://ego2.pl/wp-admin/admin.php?page=wc-orders");
+      await page.waitForSelector("tbody > tr > td > a.order-view");
+      await page.click("tbody > tr > td > a.order-view");
+    } else {
+      await page.goto(
+        `https://ego2.pl/wp-admin/admin.php?page=wc-orders&action=edit&id=${order_number_provided}`
+      );
+    }
 
     const result = [];
 
