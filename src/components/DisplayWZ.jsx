@@ -22,12 +22,12 @@ const DisplayWZ = ({ data }) => {
     doc.text(`${address}`, 14, 21, { align: "left" });
 
     // seller data
-    doc.text("Sprzedający", 138, 15, { align: "left" });
-    doc.text("Ecoterm", 138, 21, { align: "left" });
-    doc.text("os. Kaszubskie 1/21", 138, 25, { align: "left" });
-    doc.text("84-200 Wejherowo", 138, 30, { align: "left" });
-    doc.text("Numer BDO: 000024265", 138, 35, { align: "left" });
-    doc.text("VAT: 588-182-20-63", 138, 40, { align: "left" });
+    doc.text("Sprzedający", 148, 15, { align: "left" });
+    doc.text("Ecoterm", 148, 21, { align: "left" });
+    doc.text("os. Kaszubskie 1/21", 148, 25, { align: "left" });
+    doc.text("84-200 Wejherowo", 148, 30, { align: "left" });
+    doc.text("Numer BDO: 000024265", 148, 35, { align: "left" });
+    doc.text("VAT: 588-182-20-63", 148, 40, { align: "left" });
 
     // header
     doc.setFontSize(14);
@@ -55,8 +55,19 @@ const DisplayWZ = ({ data }) => {
       styles: { font: "Roboto-Regular", fontSize: 7, cellPadding: 2 },
       columnStyles: {
         0: { cellWidth: 10 },
-        1: { cellWidth: 130 },
+        1: { cellWidth: 140 },
         2: { cellWidth: 30 },
+      },
+      didDrawPage: () => {
+        const pageHeight = doc.internal.pageSize.height;
+        const pageWidth = doc.internal.pageSize.width;
+
+        const leftMargin = 15;
+        const rightMargin = 45;
+
+        doc.setFontSize(12);
+        doc.text("Wystawił: P. Białk", leftMargin, pageHeight - 10);
+        doc.text("Odebrał(a)", pageWidth - rightMargin, pageHeight - 10);
       },
     });
 
