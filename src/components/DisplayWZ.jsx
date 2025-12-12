@@ -3,9 +3,10 @@ import autoTable from "jspdf-autotable";
 import "../fonts/Roboto-Regular-normal";
 import React from "react";
 
-const DisplayWZ = ({ data }) => {
-  console.log(data);
+const dt = new Date();
+const date = dt.toISOString().slice(0, 10).replaceAll("-", "/");
 
+const DisplayWZ = ({ data }) => {
   const { result, address, order_date } = data;
 
   // order number
@@ -16,6 +17,9 @@ const DisplayWZ = ({ data }) => {
     const doc = new jsPDF();
     doc.setFont("Roboto-Regular", "normal");
     doc.setFontSize(12);
+
+    // address and date
+    doc.text(`Wejherowo, ${date}`, 148, 7);
 
     // buyer data
     doc.text("Kupujący", 14, 15, { align: "left" });
@@ -58,12 +62,13 @@ const DisplayWZ = ({ data }) => {
         1: { cellWidth: 140 },
         2: { cellWidth: 30 },
       },
+      // footer
       didDrawPage: () => {
         const pageHeight = doc.internal.pageSize.height;
         const pageWidth = doc.internal.pageSize.width;
 
-        const leftMargin = 15;
-        const rightMargin = 45;
+        const leftMargin = 17;
+        const rightMargin = 39;
 
         doc.setFontSize(12);
         doc.text("Wystawił: P. Białk", leftMargin, pageHeight - 10);

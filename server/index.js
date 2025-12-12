@@ -12,7 +12,7 @@ app.post("/scrape", async (req, res) => {
   const order_number_provided = order_number;
 
   try {
-    const browser = await puppeteer.launch({ headless: false });
+    const browser = await puppeteer.launch({ headless: true });
     const page = await browser.newPage();
 
     await page.goto("https://www.ego2.pl/wp-admin");
@@ -35,7 +35,7 @@ app.post("/scrape", async (req, res) => {
     // if order number is not provided then click the last order
     if (!order_number_provided) {
       await page.goto("https://ego2.pl/wp-admin/admin.php?page=wc-orders");
-      await page.waitForSelector("tbody > tr > td > a.order-view");
+      await new Promise((resolve) => setTimeout(resolve, 2000));
       await page.click("tbody > tr > td > a.order-view");
     } else {
       await page.goto(
