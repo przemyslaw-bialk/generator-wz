@@ -78,7 +78,10 @@ app.post("/scrape", async (req, res) => {
 
     res.json({ result: result, address: address, order_date: order_date });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    res.status(500).json({
+      message: "Nie udało się pobrać danych zamówienia",
+      details: error.message,
+    });
   }
 });
 

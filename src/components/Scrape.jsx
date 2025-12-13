@@ -7,10 +7,13 @@ const Scrape = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleScrape = async () => {
     setLoading(true);
+    setError(null);
     setData([]);
+
     try {
       const response = await fetch("http://localhost:5000/scrape", {
         method: "POST",
@@ -21,10 +24,16 @@ const Scrape = () => {
           order_number: orderNumber,
         }),
       });
-      const data = await response.json();
-      setData(data);
-    } catch (error) {
-      console.log(error);
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.message || "Błąd serwera");
+      }
+
+      setData(result);
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
@@ -57,9 +66,12 @@ const Scrape = () => {
           onChange={(e) => setOrderNumber(e.target.value)}
           placeholder="numer zamowienia"
         />
-        <button type="submit">generuj</button>
+        <button type="submit" disabled={loading}>
+          generuj
+        </button>
       </form>
       {loading ? <p>generating...</p> : <DisplayWZ data={data} />}
+      {error && <p style={{ color: "red", marginTop: 10 }}>{error}</p>}
     </>
   );
 };
